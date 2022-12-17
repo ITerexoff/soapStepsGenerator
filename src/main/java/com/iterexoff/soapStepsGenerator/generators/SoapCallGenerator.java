@@ -1,9 +1,9 @@
-package com.example.soapStepsGenerator.generators;
+package com.iterexoff.soapStepsGenerator.generators;
 
-import com.example.soapStepsGenerator.external.soap.AbstractSoapStep;
-import com.example.soapStepsGenerator.generators.context.GenerateContextsHolder;
-import com.example.soapStepsGenerator.generators.context.SoapCallGenerateContext;
-import com.example.soapStepsGenerator.generators.context.StepForFieldGenerateContext;
+import com.iterexoff.soapStepsGenerator.external.soap.AbstractSoapStep;
+import com.iterexoff.soapStepsGenerator.generators.context.GenerateContextsHolder;
+import com.iterexoff.soapStepsGenerator.generators.context.SoapCallGenerateContext;
+import com.iterexoff.soapStepsGenerator.generators.context.StepForFieldGenerateContext;
 import com.squareup.javapoet.*;
 import io.qameta.allure.Step;
 import lombok.AccessLevel;
@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 import javax.lang.model.element.Modifier;
 import java.util.function.Supplier;
 
-import static com.example.soapStepsGenerator.constants.GenerateCodeConstants.*;
+import static com.iterexoff.soapStepsGenerator.constants.GenerateCodeConstants.*;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class SoapCallGenerator {

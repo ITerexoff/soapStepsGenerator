@@ -1,8 +1,8 @@
-package com.example.soapStepsGenerator.generators;
+package com.iterexoff.soapStepsGenerator.generators;
 
-import com.example.soapStepsGenerator.external.utils.DateUtils;
-import com.example.soapStepsGenerator.generators.context.HandleListFieldContext;
-import com.example.soapStepsGenerator.generators.context.StepForFieldGenerateContext;
+import com.iterexoff.soapStepsGenerator.external.utils.DateUtils;
+import com.iterexoff.soapStepsGenerator.generators.context.HandleListFieldContext;
+import com.iterexoff.soapStepsGenerator.generators.context.StepForFieldGenerateContext;
 import com.squareup.javapoet.*;
 import io.qameta.allure.Step;
 import lombok.AccessLevel;
@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static com.example.soapStepsGenerator.constants.GenerateCodeConstants.*;
+import static com.iterexoff.soapStepsGenerator.constants.GenerateCodeConstants.*;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class StepsForListFieldGenerator {

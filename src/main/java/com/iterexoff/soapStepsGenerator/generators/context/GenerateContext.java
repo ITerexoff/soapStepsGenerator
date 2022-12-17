@@ -1,6 +1,6 @@
-package com.example.soapStepsGenerator.generators.context;
+package com.iterexoff.soapStepsGenerator.generators.context;
 
-import com.example.soapStepsGenerator.external.utils.DateUtils;
+import com.iterexoff.soapStepsGenerator.external.utils.DateUtils;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.TypeSpec;
@@ -13,7 +13,7 @@ import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import static com.example.soapStepsGenerator.constants.GenerateCodeConstants.INDENT;
+import static com.iterexoff.soapStepsGenerator.constants.GenerateCodeConstants.INDENT;
 
 @Getter
 @Setter

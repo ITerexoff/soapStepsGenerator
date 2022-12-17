@@ -1,4 +1,4 @@
-package com.example.soapStepsGenerator.constants;
+package com.iterexoff.soapStepsGenerator.constants;
 
 import com.squareup.javapoet.AnnotationSpec;
 import com.squareup.javapoet.ClassName;

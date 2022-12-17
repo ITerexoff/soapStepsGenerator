@@ -1,4 +1,4 @@
-package com.example.soapStepsGenerator.utils;
+package com.iterexoff.soapStepsGenerator.utils;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;

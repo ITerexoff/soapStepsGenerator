@@ -1,6 +1,6 @@
-package com.example.soapStepsGenerator.generators.context;
+package com.iterexoff.soapStepsGenerator.generators.context;
 
-import com.example.soapStepsGenerator.utils.TypeUtils;
+import com.iterexoff.soapStepsGenerator.utils.TypeUtils;
 import com.squareup.javapoet.ParameterizedTypeName;
 import lombok.Getter;
 import lombok.experimental.Accessors;

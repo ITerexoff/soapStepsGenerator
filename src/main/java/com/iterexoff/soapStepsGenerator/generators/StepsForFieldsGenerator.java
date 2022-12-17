@@ -1,8 +1,8 @@
-package com.example.soapStepsGenerator.generators;
+package com.iterexoff.soapStepsGenerator.generators;
 
-import com.example.soapStepsGenerator.generators.context.GenerateContextsHolder;
-import com.example.soapStepsGenerator.generators.context.HandleListFieldContext;
-import com.example.soapStepsGenerator.generators.context.StepForFieldGenerateContext;
+import com.iterexoff.soapStepsGenerator.generators.context.GenerateContextsHolder;
+import com.iterexoff.soapStepsGenerator.generators.context.HandleListFieldContext;
+import com.iterexoff.soapStepsGenerator.generators.context.StepForFieldGenerateContext;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.FieldSpec;
 import com.squareup.javapoet.MethodSpec;
@@ -22,8 +22,8 @@ import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.example.soapStepsGenerator.constants.GenerateCodeConstants.NOT_NULL_VALUE_MATCHER_NAME;
-import static com.example.soapStepsGenerator.utils.ClassUtils.isJavaBaseClass;
+import static com.iterexoff.soapStepsGenerator.constants.GenerateCodeConstants.NOT_NULL_VALUE_MATCHER_NAME;
+import static com.iterexoff.soapStepsGenerator.utils.ClassUtils.isJavaBaseClass;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class StepsForFieldsGenerator {

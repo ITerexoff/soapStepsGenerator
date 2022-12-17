@@ -1,4 +1,4 @@
-package com.example.soapStepsGenerator.external.soap;
+package com.iterexoff.soapStepsGenerator.external.soap;
 
 import lombok.AccessLevel;
 import lombok.Getter;

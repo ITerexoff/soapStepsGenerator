@@ -1,6 +1,6 @@
-package com.example.soapStepsGenerator.generators;
+package com.iterexoff.soapStepsGenerator.generators;
 
-import com.example.soapStepsGenerator.generators.context.StepForFieldGenerateContext;
+import com.iterexoff.soapStepsGenerator.generators.context.StepForFieldGenerateContext;
 import com.squareup.javapoet.AnnotationSpec;
 import com.squareup.javapoet.MethodSpec;
 import io.qameta.allure.Step;
@@ -12,7 +12,7 @@ import org.hamcrest.core.IsNull;
 import javax.lang.model.element.Modifier;
 import java.lang.reflect.Field;
 
-import static com.example.soapStepsGenerator.constants.GenerateCodeConstants.*;
+import static com.iterexoff.soapStepsGenerator.constants.GenerateCodeConstants.*;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class StepsForFieldGenerator {

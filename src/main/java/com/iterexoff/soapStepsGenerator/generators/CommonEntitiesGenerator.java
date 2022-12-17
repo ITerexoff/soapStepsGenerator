@@ -1,8 +1,8 @@
-package com.example.soapStepsGenerator.generators;
+package com.iterexoff.soapStepsGenerator.generators;
 
-import com.example.soapStepsGenerator.generators.context.GenerateContext;
-import com.example.soapStepsGenerator.generators.context.StepForFieldGenerateContext;
-import com.example.soapStepsGenerator.utils.TypeUtils;
+import com.iterexoff.soapStepsGenerator.generators.context.GenerateContext;
+import com.iterexoff.soapStepsGenerator.generators.context.StepForFieldGenerateContext;
+import com.iterexoff.soapStepsGenerator.utils.TypeUtils;
 import com.squareup.javapoet.*;
 import io.qameta.allure.Step;
 import lombok.AccessLevel;
@@ -20,8 +20,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import static com.example.soapStepsGenerator.constants.GenerateCodeConstants.*;
-import static com.example.soapStepsGenerator.utils.ClassUtils.getGetterMethodNameForField;
+import static com.iterexoff.soapStepsGenerator.constants.GenerateCodeConstants.*;
+import static com.iterexoff.soapStepsGenerator.utils.ClassUtils.getGetterMethodNameForField;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class CommonEntitiesGenerator {

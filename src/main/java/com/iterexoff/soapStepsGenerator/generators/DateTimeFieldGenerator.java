@@ -1,7 +1,7 @@
-package com.example.soapStepsGenerator.generators;
+package com.iterexoff.soapStepsGenerator.generators;
 
-import com.example.soapStepsGenerator.external.utils.DateUtils;
-import com.example.soapStepsGenerator.generators.context.StepForFieldGenerateContext;
+import com.iterexoff.soapStepsGenerator.external.utils.DateUtils;
+import com.iterexoff.soapStepsGenerator.generators.context.StepForFieldGenerateContext;
 import com.squareup.javapoet.AnnotationSpec;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.MethodSpec;
@@ -14,7 +14,7 @@ import javax.lang.model.element.Modifier;
 import java.lang.reflect.Field;
 import java.time.OffsetDateTime;
 
-import static com.example.soapStepsGenerator.constants.GenerateCodeConstants.*;
+import static com.iterexoff.soapStepsGenerator.constants.GenerateCodeConstants.*;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class DateTimeFieldGenerator {

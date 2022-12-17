@@ -1,6 +1,6 @@
-package com.example.soapStepsGenerator.generators.context;
+package com.iterexoff.soapStepsGenerator.generators.context;
 
-import com.example.soapStepsGenerator.external.soap.AbstractSoapStep;
+import com.iterexoff.soapStepsGenerator.external.soap.AbstractSoapStep;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;

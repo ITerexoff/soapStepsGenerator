@@ -1,9 +1,9 @@
-package com.example.soapStepsGenerator;
+package com.iterexoff.soapStepsGenerator;
 
-import com.example.soapStepsGenerator.generators.JavaFilesGenerator;
-import com.example.soapStepsGenerator.generators.SoapCallGenerator;
-import com.example.soapStepsGenerator.generators.context.SoapCallGenerateContext;
-import com.example.soapStepsGenerator.utils.ClassUtils;
+import com.iterexoff.soapStepsGenerator.generators.JavaFilesGenerator;
+import com.iterexoff.soapStepsGenerator.generators.SoapCallGenerator;
+import com.iterexoff.soapStepsGenerator.generators.context.SoapCallGenerateContext;
+import com.iterexoff.soapStepsGenerator.utils.ClassUtils;
 
 import java.lang.reflect.Method;
 import java.net.URLClassLoader;

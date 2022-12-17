@@ -1,4 +1,4 @@
-package com.example.soapStepsGenerator.external.utils;
+package com.iterexoff.soapStepsGenerator.external.utils;
 
 import javax.xml.datatype.XMLGregorianCalendar;
 import java.time.OffsetDateTime;

@@ -1,4 +1,4 @@
-package com.example.soapStepsGenerator.generators.context;
+package com.iterexoff.soapStepsGenerator.generators.context;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

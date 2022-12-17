@@ -1,6 +1,6 @@
-package com.example.soapStepsGenerator.generators;
+package com.iterexoff.soapStepsGenerator.generators;
 
-import com.example.soapStepsGenerator.generators.context.GenerateContext;
+import com.iterexoff.soapStepsGenerator.generators.context.GenerateContext;
 import com.squareup.javapoet.JavaFile;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -9,7 +9,7 @@ import org.hamcrest.MatcherAssert;
 import java.io.IOException;
 import java.nio.file.Path;
 
-import static com.example.soapStepsGenerator.constants.GenerateCodeConstants.ASSERT_THAT_METHOD_NAME;
+import static com.iterexoff.soapStepsGenerator.constants.GenerateCodeConstants.ASSERT_THAT_METHOD_NAME;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class JavaFilesGenerator {
