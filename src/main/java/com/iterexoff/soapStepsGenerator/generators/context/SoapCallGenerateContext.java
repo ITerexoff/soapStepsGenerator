@@ -39,8 +39,9 @@ public class SoapCallGenerateContext extends GenerateContext {
 
     public SoapCallGenerateContext setInitialWsdlInterfaceName(String initialWsdlInterfaceName) {
         this.initialWsdlInterfaceName = initialWsdlInterfaceName;
-        //fixme - remove from initialWsdlInterfaceName - uncapitalizeWsdlMethod - need for current work project
-        this.requestName = String.format("/%s: %s", initialWsdlInterfaceName, this.uncapitalizeWsdlMethod);
+        //removing from initialWsdlInterfaceName -> uncapitalizeWsdlMethod: need for current work project
+        String wsdlInterfaceName = StringUtils.replaceIgnoreCase(initialWsdlInterfaceName, this.uncapitalizeWsdlMethod, "");
+        this.requestName = String.format("/%s: %s", wsdlInterfaceName, this.uncapitalizeWsdlMethod);
         return this;
     }
 
