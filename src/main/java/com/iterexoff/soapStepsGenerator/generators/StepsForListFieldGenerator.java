@@ -119,6 +119,7 @@ public class StepsForListFieldGenerator {
         String indexParameterName = "index";
         String methodName = String.format("checkFilteredItemFrom%s", handleListFieldContext.getCapitalizeListFieldName());
 
+        String extractedItemField = handleListFieldContext.getUncapitalizeItemClassName() + "Item";
         MethodSpec.Builder checkFilteredItemMethodBuilder = MethodSpec.methodBuilder(methodName)
                 .addModifiers(Modifier.PUBLIC)
                 .addAnnotation(annotationSpec)
@@ -128,12 +129,12 @@ public class StepsForListFieldGenerator {
                 .addStatement(
                         "$T $N = $N($N).orElse(null)",
                         handleListFieldContext.getItemClass(),
-                        handleListFieldContext.getUncapitalizeItemClassName(),
+                        extractedItemField,
                         handleListFieldContext.getExtractItemFromFilteredListMethodName(),
                         indexParameterName
                 )
                 .addStatement("$T $N = \"Отфильтрованное значение элемента коллекции $N не равно ожидаемому\"", String.class, ERROR_MSG_FIELD_NAME, fieldName);
-        commonEntitiesGenerator.addAssertThatStatement(checkFilteredItemMethodBuilder, handleListFieldContext.getUncapitalizeItemClassName(), MATCHER_PARAMETER_NAME);
+        commonEntitiesGenerator.addAssertThatStatement(checkFilteredItemMethodBuilder, extractedItemField, MATCHER_PARAMETER_NAME);
 
         MethodSpec checkMethodSpec = checkFilteredItemMethodBuilder.addStatement("return this").build();
         stepForFieldGenerateContext.getGeneratingClassSpecBuilder().addMethod(checkMethodSpec);
