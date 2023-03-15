@@ -76,7 +76,7 @@ public class StepsForFieldsGenerator {
                         stepsForListFieldGenerator.addCheckFilteredListMethod(stepForFieldGenerateContext, field);
                         stepsForListFieldGenerator.addExtractItemFromFilteredListMethod(stepForFieldGenerateContext);
 
-                        if (isJavaBaseClass(handleListFieldContext.getItemClass())) {
+                        if (isJavaBaseClass(handleListFieldContext.getItemClass()) || handleListFieldContext.getItemClass().isEnum()) {
                             //customised for my current project
                             if (TypeUtils.isAssignable(handleListFieldContext.getItemType(), XMLGregorianCalendar.class)) {
                                 stepsForListFieldGenerator.addCheckFilteredItemAsOffsetDateTimeMethod(stepForFieldGenerateContext, field);
