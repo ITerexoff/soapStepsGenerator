@@ -23,7 +23,7 @@ public abstract class GenerateContext {
     protected ClassName generatingClassName;
     protected TypeSpec.Builder generatingClassSpecBuilder;
     protected Set<StaticImport> staticImports = new HashSet<>();
-    protected String excludeFromPackageName;
+    protected List<String> excludeFromPackageName;
     protected String resultStepsPackageName;
     protected String externalDateUtilPackageName;
     protected List<GenerateContext> childGenerateContexts = new ArrayList<>();
@@ -53,6 +53,11 @@ public abstract class GenerateContext {
         if (filterGenerateContext.test(this))
             generateContexts.add(this);
         return generateContexts;
+    }
+
+    public GenerateContext setExcludeFromPackageName(String... excludeFromPackageNames) {
+        this.excludeFromPackageName = Arrays.asList(excludeFromPackageNames);
+        return this;
     }
 
     public abstract boolean isInputClassInner();

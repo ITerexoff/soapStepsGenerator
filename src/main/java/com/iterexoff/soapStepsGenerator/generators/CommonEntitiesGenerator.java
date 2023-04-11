@@ -166,8 +166,11 @@ public class CommonEntitiesGenerator {
             return inputClassName.packageName();
         }
 
-        String preparedInputClassPackageName = inputClassName.packageName()
-                .replace(generateContext.getExcludeFromPackageName(), "");
+        String preparedInputClassPackageName = inputClassName.packageName();
+        for (String excludeFromPackageName : generateContext.getExcludeFromPackageName()) {
+            preparedInputClassPackageName = preparedInputClassPackageName
+                    .replace(excludeFromPackageName, "");
+        }
 
         if (preparedInputClassPackageName.startsWith("."))
             return resultStepsPackageName + preparedInputClassPackageName;
