@@ -185,6 +185,7 @@ public class CommonEntitiesGenerator {
             } else {
                 finalPackages.addAll(List.of(Arrays.copyOfRange(resultStepsPackageNameSplitByDot, i, resultStepsPackageNameSplitByDot.length)));
                 finalPackages.addAll(List.of(Arrays.copyOfRange(preparedInputClassPackageNameSplitByDot, i, preparedInputClassPackageNameSplitByDot.length)));
+                break;
             }
         }
         return String.join(".", finalPackages);
