@@ -28,6 +28,7 @@ public class SoapCallGenerateContext extends GenerateContext {
     private String externalAbstractSoapStepPackageName;
 
     public SoapCallGenerateContext setWsdlMethod(Method wsdlMethod) {
+        checkWsdlMethod(wsdlMethod);
         this.wsdlMethod = wsdlMethod;
         this.uncapitalizeWsdlMethod = StringUtils.uncapitalize(wsdlMethod.getName());
         this.capitalizeWsdlMethod = StringUtils.capitalize(wsdlMethod.getName());
@@ -51,6 +52,24 @@ public class SoapCallGenerateContext extends GenerateContext {
 
     public boolean isInputClassInner() {
         return ClassUtils.isInnerClass(wsdlInterfaceClass);
+    }
+
+    private void checkWsdlMethod(Method wsdlMethod) {
+        String errorMsg = null;
+        if (wsdlMethod.getParameters().length > 1) {
+            errorMsg = " - method contains more than 1 parameter.\n";
+        }
+        if (wsdlMethod.getReturnType().isPrimitive()) {
+            errorMsg += " - return type of method is primitive.\n";
+        }
+        if (wsdlMethod.getParameters()[0].getType().isPrimitive()) {
+            errorMsg += " - return type of 1st parameter is primitive.\n";
+        }
+
+        if (errorMsg != null) {
+            errorMsg = String.format("Unable to generate steps for wsdl method: \n'%s':\n\n", wsdlMethod) + errorMsg;
+            throw new RuntimeException(errorMsg);
+        }
     }
 
 }
