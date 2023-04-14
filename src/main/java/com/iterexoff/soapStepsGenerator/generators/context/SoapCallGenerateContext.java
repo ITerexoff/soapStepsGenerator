@@ -1,6 +1,5 @@
 package com.iterexoff.soapStepsGenerator.generators.context;
 
-import com.iterexoff.soapStepsGenerator.external.soap.AbstractSoapStep;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -25,7 +24,6 @@ public class SoapCallGenerateContext extends GenerateContext {
     private String initialWsdlInterfaceName;
     private String requestName;
     private String resultWsdlInterfacesPackageName;
-    private String externalAbstractSoapStepPackageName;
 
     public SoapCallGenerateContext setWsdlMethod(Method wsdlMethod) {
         checkWsdlMethod(wsdlMethod);
@@ -44,10 +42,6 @@ public class SoapCallGenerateContext extends GenerateContext {
         String wsdlInterfaceName = StringUtils.replaceIgnoreCase(initialWsdlInterfaceName, this.uncapitalizeWsdlMethod, "");
         this.requestName = String.format("/%s: %s", wsdlInterfaceName, this.uncapitalizeWsdlMethod);
         return this;
-    }
-
-    public String getExternalAbstractSoapStepPackageName() {
-        return externalAbstractSoapStepPackageName == null ? AbstractSoapStep.class.getPackageName() : externalAbstractSoapStepPackageName;
     }
 
     public boolean isInputClassInner() {

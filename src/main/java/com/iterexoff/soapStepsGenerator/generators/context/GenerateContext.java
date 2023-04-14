@@ -1,6 +1,8 @@
 package com.iterexoff.soapStepsGenerator.generators.context;
 
+import com.iterexoff.soapStepsGenerator.external.soap.AbstractSoapStep;
 import com.iterexoff.soapStepsGenerator.external.utils.DateUtils;
+import com.iterexoff.soapStepsGenerator.model.dto.GeneratorInputs;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.TypeSpec;
@@ -23,9 +25,7 @@ public abstract class GenerateContext {
     protected ClassName generatingClassName;
     protected TypeSpec.Builder generatingClassSpecBuilder;
     protected Set<StaticImport> staticImports = new HashSet<>();
-    protected List<String> excludeFromPackageName;
-    protected String resultStepsPackageName;
-    protected String externalDateUtilPackageName;
+    protected GeneratorInputs generatorInputs;
     protected List<GenerateContext> childGenerateContexts = new ArrayList<>();
     protected GenerateContext parentGenerateContext;
     protected Path resultsJavaFilePath;
@@ -42,6 +42,7 @@ public abstract class GenerateContext {
     }
 
     public String getExternalDateUtilPackageName() {
+        String externalDateUtilPackageName = generatorInputs.getExternalDateUtilPackageName();
         return externalDateUtilPackageName == null ? DateUtils.class.getPackageName() : externalDateUtilPackageName;
     }
 
@@ -55,9 +56,9 @@ public abstract class GenerateContext {
         return generateContexts;
     }
 
-    public GenerateContext setExcludeFromPackageName(String... excludeFromPackageNames) {
-        this.excludeFromPackageName = Arrays.asList(excludeFromPackageNames);
-        return this;
+    public String getExternalAbstractSoapStepPackageName() {
+        String externalAbstractSoapStepPackageName = generatorInputs.getExternalAbstractSoapStepPackageName();
+        return externalAbstractSoapStepPackageName == null ? AbstractSoapStep.class.getPackageName() : externalAbstractSoapStepPackageName;
     }
 
     public abstract boolean isInputClassInner();

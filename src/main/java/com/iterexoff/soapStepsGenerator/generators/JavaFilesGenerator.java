@@ -30,7 +30,7 @@ public class JavaFilesGenerator {
                                 .addStaticImport(MatcherAssert.class, ASSERT_THAT_METHOD_NAME)
                                 .build()
                 )
-                .forEach(javaFile -> writeToFile(javaFile, mainGenerateContext.getResultsJavaFilePath()));
+                .forEach(javaFile -> writeToFile(javaFile, mainGenerateContext.getGeneratorInputs().getResultsJavaFilesPath()));
     }
 
     private void writeToFile(JavaFile javaFile, Path path) {

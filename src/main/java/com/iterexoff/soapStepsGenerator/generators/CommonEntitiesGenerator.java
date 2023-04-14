@@ -161,13 +161,13 @@ public class CommonEntitiesGenerator {
 
     public String getFinalStepsPackageName(GenerateContext generateContext, ClassName inputClassName) {
 
-        String resultStepsPackageName = generateContext.getResultStepsPackageName();
+        String resultStepsPackageName = generateContext.getGeneratorInputs().getResultStepsPackageName();
         if (inputClassName.packageName().startsWith(resultStepsPackageName)) {
             return inputClassName.packageName();
         }
 
         String preparedInputClassPackageName = inputClassName.packageName();
-        for (String excludeFromPackageName : generateContext.getExcludeFromPackageName()) {
+        for (String excludeFromPackageName : generateContext.getGeneratorInputs().getExcludePathsFromPackageName()) {
             preparedInputClassPackageName = preparedInputClassPackageName
                     .replace(excludeFromPackageName, "");
         }

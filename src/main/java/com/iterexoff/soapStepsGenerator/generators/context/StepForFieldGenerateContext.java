@@ -24,9 +24,7 @@ public class StepForFieldGenerateContext extends GenerateContext {
     public StepForFieldGenerateContext(GenerateContext generateContext, Class<?> inputClass) {
         this.inputClass = inputClass;
         this.checkClassFieldName = "check" + inputClass.getSimpleName();
-        this.resultStepsPackageName = generateContext.getResultStepsPackageName();
-        this.excludeFromPackageName = generateContext.getExcludeFromPackageName();
-        this.externalDateUtilPackageName = generateContext.getExternalDateUtilPackageName();
+        super.generatorInputs = generateContext.getGeneratorInputs();
         generateContext.getChildGenerateContexts().add(this);
         super.parentGenerateContext = generateContext;
         GenerateContextsHolder.putNewGenerateContext(inputClass, this);
