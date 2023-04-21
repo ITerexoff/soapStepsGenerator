@@ -8,12 +8,14 @@ import com.squareup.javapoet.*;
 import io.qameta.allure.Step;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.lang.model.element.Modifier;
 import java.util.function.Supplier;
 
 import static com.iterexoff.soapStepsGenerator.constants.GenerateCodeConstants.*;
 
+@Slf4j
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class SoapCallGenerator {
 
@@ -30,6 +32,7 @@ public class SoapCallGenerator {
     }
 
     public void generate(SoapCallGenerateContext soapCallGenerateContext) {
+        log.debug("Generating java file with steps of soap call for wsdl method '{}'.", soapCallGenerateContext.getWsdlMethod());
         Class<?> wsdlInterfaceClass = soapCallGenerateContext.getWsdlInterfaceClass();
         //fixme take out in SoapCallGenerateContext if this naming will approve.
         ClassName soapMethodCallStepsClassName = ClassName.get(wsdlInterfaceClass.getPackageName(), soapCallGenerateContext.getCapitalizeWsdlMethod());
@@ -56,14 +59,18 @@ public class SoapCallGenerator {
         addExtractResponseStepsMethod(soapCallGenerateContext);
 
         if (!GenerateContextsHolder.hasGenerateContextExistFor(soapCallGenerateContext.getWsdlMethodResponseClass())) {
+            log.debug("Generating steps for response class '{}'.", soapCallGenerateContext.getWsdlMethodResponseClass());
             StepForFieldGenerateContext stepForResponseFieldsGenerateContext = new StepForFieldGenerateContext(
                     soapCallGenerateContext,
                     soapCallGenerateContext.getWsdlMethodResponseClass()
             );
             stepsForFieldsGenerator.fillClassSpecBuilder(stepForResponseFieldsGenerateContext);
+        } else {
+            log.debug("There has been generated steps for response class '{}' yet (by generating for other classes).", soapCallGenerateContext.getWsdlMethodResponseClass());
         }
 
         for (Class<?> methodExceptionClass : soapCallGenerateContext.getWsdlMethod().getExceptionTypes()) {
+            log.debug("Generating steps for exception class '{}'.", methodExceptionClass);
             StepForFieldGenerateContext stepForExceptionGenerateContext = new StepForFieldGenerateContext(soapCallGenerateContext, methodExceptionClass);
             stepsForFieldsGenerator.fillClassSpecBuilder(stepForExceptionGenerateContext);
             soapCallGenerateContext.getGeneratingClassSpecBuilder()

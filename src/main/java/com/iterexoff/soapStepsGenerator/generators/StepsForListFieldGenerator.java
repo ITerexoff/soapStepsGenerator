@@ -8,6 +8,7 @@ import io.qameta.allure.Step;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.lang.model.element.Modifier;
@@ -19,6 +20,7 @@ import java.util.stream.Stream;
 
 import static com.iterexoff.soapStepsGenerator.constants.GenerateCodeConstants.*;
 
+@Slf4j
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class StepsForListFieldGenerator {
 
@@ -66,6 +68,7 @@ public class StepsForListFieldGenerator {
 
     public void addExtractItemStepsFromFilteredListMethod(StepForFieldGenerateContext stepForFieldGenerateContext) {
         HandleListFieldContext handleListFieldContext = stepForFieldGenerateContext.getHandleListFieldContext();
+        log.debug("Type of item of List '{}' is '{}'. Generating extract item method.", handleListFieldContext.getListField(), handleListFieldContext.getItemClass());
         AnnotationSpec annotationSpec = AnnotationSpec.builder(Step.class)
                 .addMember("value", "\"Проверки полей {0}-го отфильтрованного элемента из списка $N:\"", handleListFieldContext.getListField().getName())
                 .build();

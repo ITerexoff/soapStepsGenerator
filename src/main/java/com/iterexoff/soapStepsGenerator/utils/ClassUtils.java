@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.text.StringEscapeUtils;
 
 import java.io.File;
@@ -36,6 +37,7 @@ public class ClassUtils extends org.apache.commons.lang3.ClassUtils {
 
     public static Optional<URLClassLoader> getURLClassLoader(Path pathWithClasses) {
         try {
+            log.debug("Get URLClassLoader for path '{}'", pathWithClasses);
             URL[] cp = new URL[]{pathWithClasses.toFile().toURI().toURL()};
             return Optional.of(new URLClassLoader(cp));
         } catch (MalformedURLException e) {
@@ -60,9 +62,9 @@ public class ClassUtils extends org.apache.commons.lang3.ClassUtils {
             return Optional.of(classFromCache);
         }
 
-        log.debug("There is searching class {} has been started.", className);
+        log.debug("There is searching class '{}' has been started.", className);
         List<Path> paths = getClassPathsFrom(className, pathWithClasses);
-        log.debug("There is searching class {} has ended.", className);
+        log.debug("There is searching class '{}' has ended.", className);
 
         if (paths.isEmpty()) {
             log.error("Class with name '{}' has not found.", className);
@@ -99,7 +101,7 @@ public class ClassUtils extends org.apache.commons.lang3.ClassUtils {
                     .filter(path -> path.toFile().getName().equalsIgnoreCase(className + CLASS_SUFFIX))
                     .toList();
         } catch (IOException e) {
-            log.error("Error during search class '{}' in path {}. Exception:\n{}", className, walkingPath, e.getMessage());
+            log.error("Error during search class '{}' in path '{}'. Exception:\n{}", className, walkingPath, ExceptionUtils.getMessage(e));
         }
         return new ArrayList<>();
     }

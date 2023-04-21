@@ -8,6 +8,7 @@ import io.qameta.allure.Step;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ClassUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -23,6 +24,7 @@ import java.util.List;
 import static com.iterexoff.soapStepsGenerator.constants.GenerateCodeConstants.*;
 import static com.iterexoff.soapStepsGenerator.utils.ClassUtils.getGetterMethodNameForField;
 
+@Slf4j
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class CommonEntitiesGenerator {
 
@@ -69,8 +71,10 @@ public class CommonEntitiesGenerator {
 
     public ClassName getGeneratingClassName(Class<?> inputClass, GenerateContext generateContext) {
         if (ClassUtils.isInnerClass(inputClass) && generateContext instanceof StepForFieldGenerateContext stepForFieldGenerateContext) {
+            log.trace("Generating class name of steps for field with inner class type '{}'", inputClass);
             return getGeneratingClassNameForInnerClass(inputClass, stepForFieldGenerateContext);
         } else {
+            log.trace("Generating class name of steps for field with class type '{}'", inputClass);
             return getGeneratingClassName(ClassName.get(inputClass), generateContext);
         }
     }
@@ -161,8 +165,11 @@ public class CommonEntitiesGenerator {
 
     public String getFinalStepsPackageName(GenerateContext generateContext, ClassName inputClassName) {
 
+        log.debug("Generating package path for class of steps '{}'", inputClassName.simpleName());
+
         String resultStepsPackageName = generateContext.getGeneratorInputs().getResultStepsPackageName();
         if (inputClassName.packageName().startsWith(resultStepsPackageName)) {
+            log.debug("Package path for class of steps '{}' starts with name of package with final results steps. Nothing to do.", inputClassName);
             return inputClassName.packageName();
         }
 
@@ -172,12 +179,19 @@ public class CommonEntitiesGenerator {
                     .replace(excludeFromPackageName, "");
         }
 
-        if (preparedInputClassPackageName.startsWith("."))
-            return resultStepsPackageName + preparedInputClassPackageName;
+        if (preparedInputClassPackageName.startsWith(".")) {
+            String resultPackageName = resultStepsPackageName + preparedInputClassPackageName;
+            log.debug("Package path for class of steps '{}' starts with some path from exclude paths list (see excludePathsFromPackageName). " +
+                    "These paths were excluded from package path of class. " +
+                    "And result steps package name was added at the first place. Result: '{}'", inputClassName, resultPackageName);
+            return resultPackageName;
+        }
 
         String[] resultStepsPackageNameSplitByDot = resultStepsPackageName.split("\\.");
         String[] preparedInputClassPackageNameSplitByDot = preparedInputClassPackageName.split("\\.");
         List<String> finalPackages = new ArrayList<>();
+
+        log.debug("Merging result steps package name '{}' and prepared input class package name '{}'", resultStepsPackageName, preparedInputClassPackageName);
 
         for (int i = 0; i < resultStepsPackageNameSplitByDot.length; i++) {
             if (resultStepsPackageNameSplitByDot[i].equals(preparedInputClassPackageNameSplitByDot[i])) {
@@ -188,6 +202,8 @@ public class CommonEntitiesGenerator {
                 break;
             }
         }
-        return String.join(".", finalPackages);
+        String resultPackageName = String.join(".", finalPackages);
+        log.debug("Result package name after merge: '{}'.", resultPackageName);
+        return resultPackageName;
     }
 }
