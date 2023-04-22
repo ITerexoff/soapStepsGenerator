@@ -16,7 +16,7 @@ public class SoapStepGeneratorApplication {
                 .setResultStepsPackageName("your.company.autotests.steps.soap")
                 .setExcludePathsFromPackageName("tro.lo.lo", "your.company.autotests.soap")
                 .setExternalDateUtilPackageName("your.company.autotests.utils")
-                .setResultsJavaFilesPath("target/generated-sources");
+                .setResultsJavaFilesPath("soapStepsGenerator/target/generated-sources");
 
         Generator.getInstance().generate(generatorInputs);
     }
