@@ -35,11 +35,11 @@ public class ClassUtils extends org.apache.commons.lang3.ClassUtils {
         return path.toFile().getName().replaceAll(CLASS_SUFFIX, "");
     }
 
-    public static Optional<URLClassLoader> getURLClassLoader(Path pathWithClasses) {
+    public static Optional<URLClassLoader> getURLClassLoader(Path pathWithClasses, ClassLoader parent) {
         try {
             log.debug("Get URLClassLoader for path '{}'", pathWithClasses);
             URL[] cp = new URL[]{pathWithClasses.toFile().toURI().toURL()};
-            return Optional.of(new URLClassLoader(cp));
+            return Optional.of(new URLClassLoader(cp, parent));
         } catch (MalformedURLException e) {
             log.error("Cannot create class loader for autotests project. Exception:\n{}", e.getMessage());
             return Optional.empty();

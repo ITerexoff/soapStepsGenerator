@@ -27,7 +27,7 @@ public class Generator {
     public void generate(GeneratorInputs generatorInputs) {
         Path classFilesPath = generatorInputs.getClassFilesPath();
 
-        ClassUtils.getURLClassLoader(classFilesPath)
+        ClassUtils.getURLClassLoader(classFilesPath, this.getClass().getClassLoader())
                 .ifPresentOrElse(
                         urlClassLoader -> handleWsdlInterfaces(generatorInputs, urlClassLoader),
                         () -> log.error("UrlClassLoader for path '{}' is null. Unable to generate soap steps.", classFilesPath)
