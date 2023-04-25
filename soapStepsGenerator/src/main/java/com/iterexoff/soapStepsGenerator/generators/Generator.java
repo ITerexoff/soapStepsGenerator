@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.Method;
-import java.net.URLClassLoader;
 import java.nio.file.Path;
 import java.util.Optional;
 
@@ -27,17 +26,20 @@ public class Generator {
     public void generate(GeneratorInputs generatorInputs) {
         Path classFilesPath = generatorInputs.getClassFilesPath();
 
-        ClassUtils.getURLClassLoader(classFilesPath, this.getClass().getClassLoader())
-                .ifPresentOrElse(
-                        urlClassLoader -> handleWsdlInterfaces(generatorInputs, urlClassLoader),
-                        () -> log.error("UrlClassLoader for path '{}' is null. Unable to generate soap steps.", classFilesPath)
-                );
+        if (classFilesPath != null) {
+            ClassUtils.getURLClassLoader(classFilesPath, this.getClass().getClassLoader())
+                    .ifPresentOrElse(
+                            urlClassLoader -> handleWsdlInterfaces(generatorInputs, urlClassLoader),
+                            () -> log.error("UrlClassLoader for path '{}' is null. Unable to generate soap steps.", classFilesPath)
+                    );
+        } else {
+            log.debug("ClassFilesPath hasn't set. Using system class loader.");
+            handleWsdlInterfaces(generatorInputs, this.getClass().getClassLoader());
+        }
     }
 
-    private void handleWsdlInterfaces(GeneratorInputs generatorInputs, URLClassLoader urlClassLoader) {
-        Path classFilesPath = generatorInputs.getClassFilesPath();
-        String classesPathByDot = ClassUtils.getClassesPathByDot(classFilesPath);
-        Optional<Class<?>> wsdlServiceClassOptional = ClassUtils.loadClassByName(urlClassLoader, classFilesPath, classesPathByDot, generatorInputs.getPortTypeServiceClassName());
+    private void handleWsdlInterfaces(GeneratorInputs generatorInputs, ClassLoader classLoader) {
+        Optional<Class<?>> wsdlServiceClassOptional = getWsdlServiceClass(generatorInputs, classLoader);
 
         if (wsdlServiceClassOptional.isEmpty()) {
             log.error("Unable to define wsdl service class by name '{}'. Unable to generate soap steps.", generatorInputs.getPortTypeServiceClassName());
@@ -47,9 +49,9 @@ public class Generator {
         generatorInputs.getWsdlInterfaces()
                 .forEach(wsdlInterfaceStr -> {
                     log.info("Generating java files with steps for wsdl interface '{}'.", wsdlInterfaceStr);
-                    Optional<Class<?>> optionalFoundWSDLInterface = ClassUtils.loadClassByName(urlClassLoader, classFilesPath, classesPathByDot, wsdlInterfaceStr);
+                    Optional<Class<?>> optionalWSDLInterfaceClass = getWSDLInterfaceClass(generatorInputs, classLoader, wsdlInterfaceStr);
 
-                    optionalFoundWSDLInterface
+                    optionalWSDLInterfaceClass
                             .ifPresentOrElse(
                                     wsdlInterface -> {
                                         for (Method declaredMethod : wsdlInterface.getDeclaredMethods()) {
@@ -67,5 +69,25 @@ public class Generator {
                                     () -> log.error("Unable to define wsdl interface class by name '{}'. Unable to generate soap steps.", wsdlInterfaceStr)
                             );
                 });
+    }
+
+    private static Optional<Class<?>> getWSDLInterfaceClass(GeneratorInputs generatorInputs, ClassLoader classLoader, String wsdlInterfaceStr) {
+        Path classFilesPath = generatorInputs.getClassFilesPath();
+        if (classFilesPath != null) {
+            String classesPathByDot = ClassUtils.getClassesPathByDot(classFilesPath);
+            return ClassUtils.loadClassFromPathByName(classLoader, classFilesPath, classesPathByDot, wsdlInterfaceStr);
+        } else {
+            return ClassUtils.loadClassByName(classLoader, wsdlInterfaceStr);
+        }
+    }
+
+    private static Optional<Class<?>> getWsdlServiceClass(GeneratorInputs generatorInputs, ClassLoader classLoader) {
+        Path classFilesPath = generatorInputs.getClassFilesPath();
+        if (classFilesPath != null) {
+            String classesPathByDot = ClassUtils.getClassesPathByDot(classFilesPath);
+            return ClassUtils.loadClassFromPathByName(classLoader, classFilesPath, classesPathByDot, generatorInputs.getPortTypeServiceClassName());
+        } else {
+            return ClassUtils.loadClassByName(classLoader, generatorInputs.getPortTypeServiceClassName());
+        }
     }
 }
