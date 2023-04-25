@@ -1,8 +1,10 @@
 package com.iterexoff.soapStepsGenerator.utils;
 
+import com.google.common.reflect.ClassPath;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.text.StringEscapeUtils;
@@ -53,7 +55,7 @@ public class ClassUtils extends org.apache.commons.lang3.ClassUtils {
     }
 
     //fixme pathWithClasses, classesPathByDot убрать
-    public static Optional<Class<?>> loadClassByName(URLClassLoader urlClassLoader, Path pathWithClasses, String classesPathByDot, String className) {
+    public static Optional<Class<?>> loadClassFromPathByName(ClassLoader classLoader, Path pathWithClasses, String classesPathByDot, String className) {
 
         if (className == null)
             return Optional.empty();
@@ -77,20 +79,63 @@ public class ClassUtils extends org.apache.commons.lang3.ClassUtils {
             return Optional.empty();
         }
 
-        if (urlClassLoader == null) {
-            log.error("urlClassLoader is null. Cannot start search class {}", className);
+        if (classLoader == null) {
+            log.error("classLoader is null. Cannot start search class {}", className);
             return Optional.empty();
         }
 
         String packageName = getPackageName(paths.get(0), className, classesPathByDot);
         try {
-            Class<?> foundedClass = urlClassLoader.loadClass(String.format("%s.%s", packageName, getClassNameFrom(paths.get(0))));
+            Class<?> foundedClass = classLoader.loadClass(String.format("%s.%s", packageName, getClassNameFrom(paths.get(0))));
             foundedClassesCache.put(className.toLowerCase(), foundedClass);
             return Optional.of(foundedClass);
         } catch (ClassNotFoundException e) {
             log.error("Error during load class '{}' from classLoader. Exception:\n{}", className, e.getMessage());
         }
         return Optional.empty();
+    }
+
+    public static Optional<Class<?>> loadClassByName(ClassLoader classLoader, String className) {
+
+        if (className == null)
+            return Optional.empty();
+
+        Class<?> classFromCache = foundedClassesCache.get(className.toLowerCase());
+        if (classFromCache != null) {
+            return Optional.of(classFromCache);
+        }
+
+        if (classLoader == null) {
+            log.error("classLoader is null. Cannot start search class {}", className);
+            return Optional.empty();
+        }
+
+        List<ClassPath.ClassInfo> foundClassInfos = null;
+        try {
+            foundClassInfos = ClassPath.from(classLoader)
+                    .getTopLevelClasses()
+                    .stream()
+                    .filter(classInfo -> StringUtils.endsWithIgnoreCase(classInfo.getName(), "." + className))
+                    .toList();
+        } catch (IOException e) {
+            log.error("Error during load class '{}' from classLoader. Exception:\n{}", className, e.getMessage());
+            return Optional.empty();
+        }
+
+        if (CollectionUtils.isEmpty(foundClassInfos)) {
+            log.error("Class with name '{}' has not found.", className);
+            return Optional.empty();
+        }
+
+        if (foundClassInfos.size() > 1) {
+            log.error("There has found more than 1 classes with name '{}'. Paths: {}", className, foundClassInfos);
+            return Optional.empty();
+        }
+
+        Class<?> foundedClass = foundClassInfos.get(0).load();
+        foundedClassesCache.put(className.toLowerCase(), foundedClass);
+
+        return Optional.of(foundedClass);
     }
 
     public static List<Path> getClassPathsFrom(String className, Path walkingPath) {

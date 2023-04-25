@@ -2,6 +2,7 @@ package com.iterexoff;
 
 import com.iterexoff.soapStepsGenerator.generators.Generator;
 import com.iterexoff.soapStepsGenerator.model.dto.GeneratorInputs;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
@@ -14,7 +15,7 @@ public class GenerateSoapStepsMojo extends AbstractMojo {
     /**
      * Path to compiled class files of wsdl.
      */
-    @Parameter(property = "classFilesPath", required = true)
+    @Parameter(property = "classFilesPath")
     private String classFilesPath;
 
     /**
@@ -63,7 +64,6 @@ public class GenerateSoapStepsMojo extends AbstractMojo {
         getLog().info("Generating soap steps has been started.");
 
         GeneratorInputs generatorInputs = new GeneratorInputs()
-                .setClassFilesPath(classFilesPath)
                 .setWsdlInterfaces(wsdlInterfaces)
                 .setPortTypeServiceClassName(portTypeServiceClassName)
                 .setExternalAbstractSoapStepPackageName(externalAbstractSoapStepPackageName)
@@ -71,6 +71,9 @@ public class GenerateSoapStepsMojo extends AbstractMojo {
                 .setExcludePathsFromPackageName(excludePathsFromPackageName)
                 .setExternalDateUtilPackageName(externalDateUtilPackageName)
                 .setResultsJavaFilesPath(resultsJavaFilesPath);
+
+        if (StringUtils.isNotBlank(classFilesPath))
+            generatorInputs.setClassFilesPath(classFilesPath);
 
         Generator.getInstance().generate(generatorInputs);
 
