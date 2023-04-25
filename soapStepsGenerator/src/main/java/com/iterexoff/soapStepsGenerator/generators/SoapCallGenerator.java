@@ -35,7 +35,7 @@ public class SoapCallGenerator {
         log.debug("Generating java file with steps of soap call for wsdl method '{}'.", soapCallGenerateContext.getWsdlMethod());
         Class<?> wsdlInterfaceClass = soapCallGenerateContext.getWsdlInterfaceClass();
         //fixme take out in SoapCallGenerateContext if this naming will approve.
-        ClassName soapMethodCallStepsClassName = ClassName.get(wsdlInterfaceClass.getPackageName(), soapCallGenerateContext.getCapitalizeWsdlMethod());
+        ClassName soapMethodCallStepsClassName = ClassName.get(wsdlInterfaceClass.getPackage().getName(), soapCallGenerateContext.getCapitalizeWsdlMethod());
         ClassName generatingClassName = commonEntitiesGenerator.getGeneratingClassName(soapMethodCallStepsClassName, soapCallGenerateContext);
         soapCallGenerateContext.setGeneratingClassName(generatingClassName)
                 .setGeneratingClassSpecBuilder(TypeSpec.classBuilder(generatingClassName).addModifiers(Modifier.PUBLIC));
@@ -131,12 +131,10 @@ public class SoapCallGenerator {
                 .addModifiers(Modifier.PROTECTED)
                 .returns(soapCallGenerateContext.getWsdlInterfaceClass())
                 .addAnnotation(Override.class)
-                .addCode("""
-                                return $N(
-                                        () -> $N($T::new)
-                                                .$N($T.class)
-                                );
-                                """,
+                .addCode("return $N(\n" +
+                                "        () -> $N($T::new)\n" +
+                                "                .$N($T.class)\n" +
+                                ");\n",
                         GET_PORT_INSTANCE_METHOD_NAME,
                         GET_SERVICE_METHOD_NAME,
                         soapCallGenerateContext.getWsdlServiceClass(),

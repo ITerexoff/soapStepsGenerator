@@ -27,11 +27,12 @@ public class Generator {
     public void generate(GeneratorInputs generatorInputs) {
         Path classFilesPath = generatorInputs.getClassFilesPath();
 
-        ClassUtils.getURLClassLoader(classFilesPath, this.getClass().getClassLoader())
-                .ifPresentOrElse(
-                        urlClassLoader -> handleWsdlInterfaces(generatorInputs, urlClassLoader),
-                        () -> log.error("UrlClassLoader for path '{}' is null. Unable to generate soap steps.", classFilesPath)
-                );
+        Optional<URLClassLoader> optionalURLClassLoader = ClassUtils.getURLClassLoader(classFilesPath, this.getClass().getClassLoader());
+        if (!optionalURLClassLoader.isPresent()) {
+            log.error("UrlClassLoader for path '{}' is null. Unable to generate soap steps.", classFilesPath);
+            return;
+        }
+        handleWsdlInterfaces(generatorInputs, optionalURLClassLoader.get());
     }
 
     private void handleWsdlInterfaces(GeneratorInputs generatorInputs, URLClassLoader urlClassLoader) {
@@ -39,7 +40,7 @@ public class Generator {
         String classesPathByDot = ClassUtils.getClassesPathByDot(classFilesPath);
         Optional<Class<?>> wsdlServiceClassOptional = ClassUtils.loadClassByName(urlClassLoader, classFilesPath, classesPathByDot, generatorInputs.getPortTypeServiceClassName());
 
-        if (wsdlServiceClassOptional.isEmpty()) {
+        if (!wsdlServiceClassOptional.isPresent()) {
             log.error("Unable to define wsdl service class by name '{}'. Unable to generate soap steps.", generatorInputs.getPortTypeServiceClassName());
             return;
         }
@@ -49,23 +50,23 @@ public class Generator {
                     log.info("Generating java files with steps for wsdl interface '{}'.", wsdlInterfaceStr);
                     Optional<Class<?>> optionalFoundWSDLInterface = ClassUtils.loadClassByName(urlClassLoader, classFilesPath, classesPathByDot, wsdlInterfaceStr);
 
-                    optionalFoundWSDLInterface
-                            .ifPresentOrElse(
-                                    wsdlInterface -> {
-                                        for (Method declaredMethod : wsdlInterface.getDeclaredMethods()) {
-                                            log.debug("Generating java files with steps for wsdl interface '{}' and method '{}'.", wsdlInterfaceStr, declaredMethod);
-                                            SoapCallGenerateContext generateContext = new SoapCallGenerateContext()
-                                                    .setWsdlInterfaceClass(wsdlInterface)
-                                                    .setWsdlMethod(declaredMethod)
-                                                    .setWsdlServiceClass(wsdlServiceClassOptional.get())
-                                                    .setInitialWsdlInterfaceName(wsdlInterfaceStr);
-                                            generateContext.setGeneratorInputs(generatorInputs);
-                                            SoapCallGenerator.getInstance().generate(generateContext);
-                                            JavaFilesGenerator.getInstance().generate(generateContext);
-                                        }
-                                    },
-                                    () -> log.error("Unable to define wsdl interface class by name '{}'. Unable to generate soap steps.", wsdlInterfaceStr)
-                            );
+                    if (!optionalFoundWSDLInterface.isPresent()) {
+                        log.error("Unable to define wsdl interface class by name '{}'. Unable to generate soap steps.", wsdlInterfaceStr);
+                        return;
+                    }
+
+                    Class<?> wsdlInterface = optionalFoundWSDLInterface.get();
+                    for (Method declaredMethod : wsdlInterface.getDeclaredMethods()) {
+                        log.debug("Generating java files with steps for wsdl interface '{}' and method '{}'.", wsdlInterfaceStr, declaredMethod);
+                        SoapCallGenerateContext generateContext = new SoapCallGenerateContext()
+                                .setWsdlInterfaceClass(wsdlInterface)
+                                .setWsdlMethod(declaredMethod)
+                                .setWsdlServiceClass(wsdlServiceClassOptional.get())
+                                .setInitialWsdlInterfaceName(wsdlInterfaceStr);
+                        generateContext.setGeneratorInputs(generatorInputs);
+                        SoapCallGenerator.getInstance().generate(generateContext);
+                        JavaFilesGenerator.getInstance().generate(generateContext);
+                    }
                 });
     }
 }

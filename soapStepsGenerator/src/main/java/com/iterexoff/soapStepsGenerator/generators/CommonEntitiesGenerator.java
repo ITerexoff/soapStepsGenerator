@@ -70,9 +70,9 @@ public class CommonEntitiesGenerator {
     }
 
     public ClassName getGeneratingClassName(Class<?> inputClass, GenerateContext generateContext) {
-        if (ClassUtils.isInnerClass(inputClass) && generateContext instanceof StepForFieldGenerateContext stepForFieldGenerateContext) {
+        if (ClassUtils.isInnerClass(inputClass) && generateContext instanceof StepForFieldGenerateContext) {
             log.trace("Generating class name of steps for field with inner class type '{}'", inputClass);
-            return getGeneratingClassNameForInnerClass(inputClass, stepForFieldGenerateContext);
+            return getGeneratingClassNameForInnerClass(inputClass, (StepForFieldGenerateContext) generateContext);
         } else {
             log.trace("Generating class name of steps for field with class type '{}'", inputClass);
             return getGeneratingClassName(ClassName.get(inputClass), generateContext);
@@ -82,8 +82,8 @@ public class CommonEntitiesGenerator {
     private ClassName getGeneratingClassNameForInnerClass(Class<?> inputClass, StepForFieldGenerateContext stepForFieldGenerateContext) {
         GenerateContext parentGenerateContext = stepForFieldGenerateContext.getParentGenerateContext();
         ClassName parentGeneratingClassName;
-        if (parentGenerateContext instanceof StepForFieldGenerateContext stepForFieldParentGenerateContext) {
-            parentGeneratingClassName = stepForFieldParentGenerateContext.getGeneratingClassName();
+        if (parentGenerateContext instanceof StepForFieldGenerateContext) {
+            parentGeneratingClassName = parentGenerateContext.getGeneratingClassName();
             if (parentGeneratingClassName == null)
                 throw new RuntimeException(String.format("'%s' is inner class. Can not define ClassName of steps " +
                         "for this class because 'generatingClassName' is null for 'parentGenerateContext'" +
@@ -99,7 +99,7 @@ public class CommonEntitiesGenerator {
         return ClassName.get(
                 parentGeneratingClassName.packageName(),
                 firstParentClassSimpleName,
-                parentClassSimpleNames.toArray(String[]::new)
+                parentClassSimpleNames.toArray(new String[0])
         );
     }
 
@@ -197,8 +197,8 @@ public class CommonEntitiesGenerator {
             if (resultStepsPackageNameSplitByDot[i].equals(preparedInputClassPackageNameSplitByDot[i])) {
                 finalPackages.add(resultStepsPackageNameSplitByDot[i]);
             } else {
-                finalPackages.addAll(List.of(Arrays.copyOfRange(resultStepsPackageNameSplitByDot, i, resultStepsPackageNameSplitByDot.length)));
-                finalPackages.addAll(List.of(Arrays.copyOfRange(preparedInputClassPackageNameSplitByDot, i, preparedInputClassPackageNameSplitByDot.length)));
+                finalPackages.addAll(Arrays.asList(Arrays.copyOfRange(resultStepsPackageNameSplitByDot, i, resultStepsPackageNameSplitByDot.length)));
+                finalPackages.addAll(Arrays.asList(Arrays.copyOfRange(preparedInputClassPackageNameSplitByDot, i, preparedInputClassPackageNameSplitByDot.length)));
                 break;
             }
         }

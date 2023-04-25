@@ -18,6 +18,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 @Slf4j
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -99,7 +100,7 @@ public class ClassUtils extends org.apache.commons.lang3.ClassUtils {
                     .filter(Files::isReadable)
                     .filter(ClassUtils::isClassFile)
                     .filter(path -> path.toFile().getName().equalsIgnoreCase(className + CLASS_SUFFIX))
-                    .toList();
+                    .collect(Collectors.toList());
         } catch (IOException e) {
             log.error("Error during search class '{}' in path '{}'. Exception:\n{}", className, walkingPath, ExceptionUtils.getMessage(e));
         }
@@ -115,7 +116,7 @@ public class ClassUtils extends org.apache.commons.lang3.ClassUtils {
     }
 
     public static boolean isJavaBaseClass(Class<?> clazz) {
-        return clazz.getPackageName().startsWith("java.") || clazz.getPackageName().startsWith("javax.");
+        return clazz.getPackage().getName().startsWith("java.") || clazz.getPackage().getName().startsWith("javax.");
     }
 
     public static String getGetterMethodNameForField(Class<?> classWithField, Field field) {

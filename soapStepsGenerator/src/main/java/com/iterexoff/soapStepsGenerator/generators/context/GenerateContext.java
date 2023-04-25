@@ -43,7 +43,7 @@ public abstract class GenerateContext {
 
     public String getExternalDateUtilPackageName() {
         String externalDateUtilPackageName = generatorInputs.getExternalDateUtilPackageName();
-        return externalDateUtilPackageName == null ? DateUtils.class.getPackageName() : externalDateUtilPackageName;
+        return externalDateUtilPackageName == null ? DateUtils.class.getPackage().getName() : externalDateUtilPackageName;
     }
 
     public List<GenerateContext> extractAllGenerateContexts(Predicate<GenerateContext> filterGenerateContext) {
@@ -58,7 +58,7 @@ public abstract class GenerateContext {
 
     public String getExternalAbstractSoapStepPackageName() {
         String externalAbstractSoapStepPackageName = generatorInputs.getExternalAbstractSoapStepPackageName();
-        return externalAbstractSoapStepPackageName == null ? AbstractSoapStep.class.getPackageName() : externalAbstractSoapStepPackageName;
+        return externalAbstractSoapStepPackageName == null ? AbstractSoapStep.class.getPackage().getName() : externalAbstractSoapStepPackageName;
     }
 
     public abstract boolean isInputClassInner();

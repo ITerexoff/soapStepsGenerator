@@ -54,11 +54,9 @@ public class StepsForListFieldGenerator {
                 .addModifiers(Modifier.PUBLIC)
                 .returns(ParameterizedTypeName.get(Stream.class, handleListFieldContext.getItemType()))
                 .addStatement("$N()", stepForFieldGenerateContext.getCheckThatCheckFieldIsExistMethodName())
-                .addCode("""
-                                return $N.get$N()
-                                        .stream()
-                                        .filter($N);
-                                """,
+                .addCode("return $N.get$N()\n" +
+                                "        .stream()\n" +
+                                "        .filter($N);\n",
                         stepForFieldGenerateContext.getCheckClassFieldName(),
                         handleListFieldContext.getCapitalizeListFieldName(),
                         handleListFieldContext.getFilterItemsInListFieldName())
@@ -101,11 +99,9 @@ public class StepsForListFieldGenerator {
                 .addModifiers(Modifier.PUBLIC)
                 .returns(handleListFieldContext.getTypeNameOfOptionalItem())
                 .addParameter(int.class, indexParameterName)
-                .addCode("""
-                                return $N()
-                                        .skip($N)
-                                        .findFirst();
-                                """,
+                .addCode("return $N()\n" +
+                                "        .skip($N)\n" +
+                                "        .findFirst();\n",
                         handleListFieldContext.getGetFilteredItemsStreamMethodName(),
                         indexParameterName
                 )

@@ -5,6 +5,7 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 import org.apache.commons.collections4.CollectionUtils;
 
+import java.io.File;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
@@ -24,7 +25,7 @@ public class GeneratorInputs {
     protected Path resultsJavaFilesPath;
 
     public GeneratorInputs setClassFilesPath(String classFilesPath) {
-        this.classFilesPath = Path.of(classFilesPath);
+        this.classFilesPath = new File(classFilesPath).toPath();
         return this;
     }
 
@@ -59,7 +60,7 @@ public class GeneratorInputs {
     }
 
     public GeneratorInputs setResultsJavaFilesPath(String resultsJavaFilesPath) {
-        this.resultsJavaFilesPath = Path.of(resultsJavaFilesPath);
+        this.resultsJavaFilesPath = new File(resultsJavaFilesPath).toPath();
         return this;
     }
 
