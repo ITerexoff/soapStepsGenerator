@@ -7,10 +7,10 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>soap-steps-maven-plugin</artifactId>
+    <artifactId>soap-steps-maven-plugin-java8</artifactId>
     <packaging>maven-plugin</packaging>
 
-    <name>Soap steps generator maven plugin</name>
+    <name>Soap steps generator maven plugin (compiled by java 8)</name>
 
     <url>https://github.com/ITerexoff</url>
 
