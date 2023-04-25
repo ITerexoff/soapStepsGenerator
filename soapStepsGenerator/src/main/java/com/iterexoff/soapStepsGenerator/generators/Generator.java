@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.Method;
+import java.net.URLClassLoader;
 import java.nio.file.Path;
 import java.util.Optional;
 
@@ -52,12 +53,12 @@ public class Generator {
                     log.info("Generating java files with steps for wsdl interface '{}'.", wsdlInterfaceStr);
                     Optional<Class<?>> optionalWSDLInterfaceClass = getWSDLInterfaceClass(generatorInputs, classLoader, wsdlInterfaceStr);
 
-                    if (!optionalFoundWSDLInterface.isPresent()) {
+                    if (!optionalWSDLInterfaceClass.isPresent()) {
                         log.error("Unable to define wsdl interface class by name '{}'. Unable to generate soap steps.", wsdlInterfaceStr);
                         return;
                     }
 
-                    Class<?> wsdlInterface = optionalFoundWSDLInterface.get();
+                    Class<?> wsdlInterface = optionalWSDLInterfaceClass.get();
                     for (Method declaredMethod : wsdlInterface.getDeclaredMethods()) {
                         log.debug("Generating java files with steps for wsdl interface '{}' and method '{}'.", wsdlInterfaceStr, declaredMethod);
                         SoapCallGenerateContext generateContext = new SoapCallGenerateContext()

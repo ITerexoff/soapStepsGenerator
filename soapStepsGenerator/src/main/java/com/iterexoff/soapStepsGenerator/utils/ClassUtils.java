@@ -116,7 +116,7 @@ public class ClassUtils extends org.apache.commons.lang3.ClassUtils {
                     .getTopLevelClasses()
                     .stream()
                     .filter(classInfo -> StringUtils.endsWithIgnoreCase(classInfo.getName(), "." + className))
-                    .toList();
+                    .collect(Collectors.toList());
         } catch (IOException e) {
             log.error("Error during load class '{}' from classLoader. Exception:\n{}", className, e.getMessage());
             return Optional.empty();
