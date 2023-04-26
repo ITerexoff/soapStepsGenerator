@@ -9,7 +9,7 @@ import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 
-@Mojo(name = "generateSoapSteps", defaultPhase = LifecyclePhase.COMPILE)
+@Mojo(name = "generateSoapSteps", defaultPhase = LifecyclePhase.NONE)
 public class GenerateSoapStepsMojo extends AbstractMojo {
 
     /**
