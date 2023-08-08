@@ -160,7 +160,7 @@ public class ClassUtils extends org.apache.commons.lang3.ClassUtils {
     }
 
     public static boolean isJavaBaseClass(Class<?> clazz) {
-        return clazz.getPackageName().startsWith("java.") || clazz.getPackageName().startsWith("javax.");
+        return clazz.isPrimitive() || clazz.getPackageName().startsWith("java.") || clazz.getPackageName().startsWith("javax.");
     }
 
     public static String getGetterMethodNameForField(Class<?> classWithField, Field field) {
