@@ -2,12 +2,17 @@ package com.iterexoff;
 
 import com.iterexoff.soapStepsGenerator.generators.Generator;
 import com.iterexoff.soapStepsGenerator.model.dto.GeneratorInputs;
+import com.iterexoff.soapStepsGenerator.model.dto.java.StaticImport;
+import com.squareup.javapoet.ClassName;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
+
+import java.util.Arrays;
+import java.util.List;
 
 @Mojo(name = "generateSoapSteps", defaultPhase = LifecyclePhase.NONE)
 public class GenerateSoapStepsMojo extends AbstractMojo {
@@ -42,6 +47,36 @@ public class GenerateSoapStepsMojo extends AbstractMojo {
     @Parameter(property = "externalDateUtilPackageName", required = true)
     private String externalDateUtilPackageName;
 
+    //fixme incorrect formatting of description in pom.xml (where this plugin is using).
+    /**
+     * <p>
+     * Imports that you need to add to generated class of steps for wsdl method.
+     * </p>
+     *
+     * <pre>
+     * &lt;configuration&gt;
+     *   &lt;additionalStaticImportsInWsdlCallClassSteps&gt;
+     *     &lt;additionalStaticImportInWsdlCallClassSteps&gt;
+     *       &lt;packageName&gt;Package name of class for static import.&lt;/packageName&gt;
+     *       &lt;simpleName&gt;Simple name of class for static import.&lt;/simpleName&gt;
+     *       &lt;paramName&gt;Name of static param for static import.&lt;/paramName&gt;
+     *     &lt;/additionalStaticImportInWsdlCallClassSteps&gt;
+     *     &lt;!-- ... more ... --&gt;
+     *   &lt;/additionalStaticImportsInWsdlCallClassSteps&gt;
+     * &lt;/configuration&gt;
+     * </pre>
+     */
+    @Parameter(property = "additionalStaticImportsInWsdlInterfaceSteps", required = true)
+    protected StaticImportMojo[] additionalStaticImportsInWsdlCallClassSteps;
+
+    /**
+     * This if code template for get wsdl server for wsdl url.
+     * Example: System.getProperty("myWsdlLocation")
+     * Example: "127.0.0.1:9001"
+     */
+    @Parameter(property = "getWsdlInterfaceLocationTemplate", required = true)
+    protected String getWsdlInterfaceLocationTemplate;
+
     /**
      * Name of package of generated soap steps.
      */
@@ -70,7 +105,18 @@ public class GenerateSoapStepsMojo extends AbstractMojo {
                 .setResultStepsPackageName(resultStepsPackageName)
                 .setExcludePathsFromPackageName(excludePathsFromPackageName)
                 .setExternalDateUtilPackageName(externalDateUtilPackageName)
+                .setGetWsdlInterfaceLocationTemplate(getWsdlInterfaceLocationTemplate)
                 .setResultsJavaFilesPath(resultsJavaFilesPath);
+
+        List<StaticImport> additionalStaticImportsInWsdlCallClassSteps = Arrays.stream(this.additionalStaticImportsInWsdlCallClassSteps)
+                .map(staticImportMojo ->
+                        new StaticImport(
+                                ClassName.get(staticImportMojo.getPackageName(), staticImportMojo.getSimpleName()),
+                                staticImportMojo.getParamName()
+                        )
+                )
+                .toList();
+        generatorInputs.setAdditionalStaticImportsToWsdlCallClassSteps(additionalStaticImportsInWsdlCallClassSteps);
 
         if (StringUtils.isNotBlank(classFilesPath))
             generatorInputs.setClassFilesPath(classFilesPath);

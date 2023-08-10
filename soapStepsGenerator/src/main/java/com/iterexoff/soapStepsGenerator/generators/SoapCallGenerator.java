@@ -49,6 +49,7 @@ public class SoapCallGenerator {
         soapCallGenerateContext.getGeneratingClassSpecBuilder()
                 .superclass(extendClassParameterizedTypeName);
 
+        addStaticImports(soapCallGenerateContext);
         addPortInstanceField(soapCallGenerateContext);
 
         addConstructor(soapCallGenerateContext);
@@ -78,6 +79,12 @@ public class SoapCallGenerator {
         }
     }
 
+    private void addStaticImports(SoapCallGenerateContext soapCallGenerateContext) {
+        soapCallGenerateContext.getGeneratorInputs()
+                .getAdditionalStaticImportsToWsdlCallClassSteps()
+                .forEach(staticImport -> soapCallGenerateContext.getStaticImports().add(staticImport));
+    }
+
     private void addPortInstanceField(SoapCallGenerateContext soapCallGenerateContext) {
         FieldSpec portInstanceFieldSpec = FieldSpec.builder(
                         soapCallGenerateContext.getWsdlInterfaceClass(),
@@ -93,10 +100,10 @@ public class SoapCallGenerator {
         MethodSpec constructorMethodSpec = MethodSpec.constructorBuilder()
                 .addModifiers(Modifier.PUBLIC)
                 .addStatement(
-                        "$N($T.class, \"\"/*$S*/)",
+                        "$N($T.class, $N)",
                         SET_WSDL_LOCATION_METHOD_NAME,
                         soapCallGenerateContext.getWsdlServiceClass(),
-                        GET_PROPERTY_TEMPLATE)
+                        soapCallGenerateContext.getGeneratorInputs().getGetWsdlInterfaceLocationTemplate())
                 .addStatement(GET_PORT_METHOD_NAME + "()")
                 .build();
 

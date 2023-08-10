@@ -16,6 +16,8 @@ public class SoapStepGeneratorApplication {
                 .setResultStepsPackageName("your.company.autotests.steps.soap")
                 .setExcludePathsFromPackageName("tro.lo.lo", "your.company.autotests.soap")
                 .setExternalDateUtilPackageName("your.company.autotests.utils")
+                .setAdditionalStaticImportsToWsdlCallClassStep(new StaticImport(ClassName.get("your.company.autotests.utils", "TestProperties"), "getProperty"))
+                .setGetWsdlInterfaceLocationTemplate("() -> TestProperties.getProperty(\"soap.request.X.url\")")
                 .setResultsJavaFilesPath("soapStepsGenerator/target/generated-sources");
 
         Generator.getInstance().generate(generatorInputs);

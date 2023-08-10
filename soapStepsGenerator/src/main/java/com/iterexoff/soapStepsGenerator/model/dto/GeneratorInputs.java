@@ -1,11 +1,13 @@
 package com.iterexoff.soapStepsGenerator.model.dto;
 
+import com.iterexoff.soapStepsGenerator.model.dto.java.StaticImport;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import org.apache.commons.collections4.CollectionUtils;
 
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -15,12 +17,16 @@ import java.util.List;
 public class GeneratorInputs {
 
     private Path classFilesPath;
-    private List<String> wsdlInterfaces;
+    private List<String> wsdlInterfaces = new ArrayList<>();
+    ;
     private String portTypeServiceClassName;
     private String externalAbstractSoapStepPackageName;
     protected String externalDateUtilPackageName;
+    protected List<StaticImport> additionalStaticImportsToWsdlCallClassSteps = new ArrayList<>();
+    ;
+    protected String getWsdlInterfaceLocationTemplate;
     protected String resultStepsPackageName;
-    protected List<String> excludePathsFromPackageName;
+    protected List<String> excludePathsFromPackageName = new ArrayList<>();
     protected Path resultsJavaFilesPath;
 
     public GeneratorInputs setClassFilesPath(String classFilesPath) {
@@ -63,4 +69,18 @@ public class GeneratorInputs {
         return this;
     }
 
+    public GeneratorInputs setAdditionalStaticImportsToWsdlCallClassStep(StaticImport additionalStaticImportInWsdlCallClassSteps) {
+        CollectionUtils.addIgnoreNull(additionalStaticImportsToWsdlCallClassSteps, additionalStaticImportInWsdlCallClassSteps);
+        return this;
+    }
+
+    public GeneratorInputs setAdditionalStaticImportsToWsdlCallClassSteps(StaticImport... additionalStaticImportsToWsdlCallClassSteps) {
+        this.additionalStaticImportsToWsdlCallClassSteps = Arrays.asList(additionalStaticImportsToWsdlCallClassSteps);
+        return this;
+    }
+
+    public GeneratorInputs setAdditionalStaticImportsToWsdlCallClassSteps(List<StaticImport> additionalStaticImportsToWsdlCallClassSteps) {
+        this.additionalStaticImportsToWsdlCallClassSteps = additionalStaticImportsToWsdlCallClassSteps;
+        return this;
+    }
 }

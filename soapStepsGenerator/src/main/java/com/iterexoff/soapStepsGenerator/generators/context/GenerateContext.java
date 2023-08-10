@@ -3,6 +3,7 @@ package com.iterexoff.soapStepsGenerator.generators.context;
 import com.iterexoff.soapStepsGenerator.external.soap.AbstractSoapStep;
 import com.iterexoff.soapStepsGenerator.external.utils.DateUtils;
 import com.iterexoff.soapStepsGenerator.model.dto.GeneratorInputs;
+import com.iterexoff.soapStepsGenerator.model.dto.java.StaticImport;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.TypeSpec;
@@ -62,20 +63,4 @@ public abstract class GenerateContext {
     }
 
     public abstract boolean isInputClassInner();
-
-    @Getter
-    @Setter
-    public static class StaticImport {
-        private Class<?> clazz;
-        private String[] names;
-
-        public StaticImport(Class<?> clazz, String... names) {
-            this.clazz = clazz;
-            this.names = names;
-        }
-
-        public void addStaticImportTo(JavaFile.Builder javaFileBuilder) {
-            javaFileBuilder.addStaticImport(clazz, names);
-        }
-    }
 }

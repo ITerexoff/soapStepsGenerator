@@ -29,7 +29,6 @@ public class GenerateCodeConstants {
     public static final String PORT_FIELD_NAME = "port";
     public static final String CALL_REQUEST_METHOD_NAME = "callRequest";
     public static final String GET_SERVICE_METHOD_NAME = "getService";
-    public static final String GET_PROPERTY_TEMPLATE = "TestProperties.getProperty(\"soap.request.X.url\")";
     public static final String GET_REQUEST_NAME_METHOD_NAME = "getRequestName";
     public static final String GET_RESPONSE_METHOD_NAME = "super.getResponse";
     public static final String GET_EXCEPTION_METHOD_NAME = "super.getException";
