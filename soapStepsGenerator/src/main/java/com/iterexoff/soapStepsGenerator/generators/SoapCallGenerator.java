@@ -93,7 +93,7 @@ public class SoapCallGenerator {
         MethodSpec constructorMethodSpec = MethodSpec.constructorBuilder()
                 .addModifiers(Modifier.PUBLIC)
                 .addStatement(
-                        "$N($T.class, \"\"/*$S*/)",
+                        "$N($T.class, () -> \"\"/*$S*/)",
                         SET_WSDL_LOCATION_METHOD_NAME,
                         soapCallGenerateContext.getWsdlServiceClass(),
                         GET_PROPERTY_TEMPLATE)
