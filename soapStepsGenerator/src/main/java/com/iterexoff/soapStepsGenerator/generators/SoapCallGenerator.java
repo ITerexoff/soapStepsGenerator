@@ -168,7 +168,7 @@ public class SoapCallGenerator {
 
     private void addGetRequestNameMethod(SoapCallGenerateContext soapCallGenerateContext) {
         MethodSpec addGetPortMethodSpec = MethodSpec.methodBuilder(GET_REQUEST_NAME_METHOD_NAME)
-                .addModifiers(Modifier.PROTECTED)
+                .addModifiers(Modifier.PUBLIC)
                 .returns(String.class)
                 .addAnnotation(Override.class)
                 .addStatement("return $S", soapCallGenerateContext.getRequestName())
