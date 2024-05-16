@@ -175,4 +175,12 @@ public class ClassUtils extends org.apache.commons.lang3.ClassUtils {
             return "get" + capitalizedFieldName;
         }
     }
+
+    public static List<Field> getDeclaredFieldsWithSuperclasses(Class<?> inputClass) {
+        List<Field> fields = new LinkedList<>();
+        for (Class<?> clazz = inputClass; clazz != Object.class; clazz = clazz.getSuperclass()) {
+            fields.addAll(Arrays.asList(clazz.getDeclaredFields()));
+        }
+        return fields;
+    }
 }

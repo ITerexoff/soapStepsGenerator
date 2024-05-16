@@ -20,10 +20,10 @@ import javax.lang.model.element.Modifier;
 import javax.xml.datatype.XMLGregorianCalendar;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.util.Arrays;
 import java.util.List;
 
 import static com.iterexoff.soapStepsGenerator.constants.GenerateCodeConstants.NOT_NULL_VALUE_MATCHER_NAME;
+import static com.iterexoff.soapStepsGenerator.utils.ClassUtils.getDeclaredFieldsWithSuperclasses;
 import static com.iterexoff.soapStepsGenerator.utils.ClassUtils.isJavaBaseClass;
 
 @Slf4j
@@ -66,7 +66,7 @@ public class StepsForFieldsGenerator {
 
         Class<?> inputClass = stepForFieldGenerateContext.getInputClass();
 
-        Arrays.stream(inputClass.getDeclaredFields())
+        getDeclaredFieldsWithSuperclasses(inputClass)
                 .forEach(field -> {
                     log.debug("Generating steps for field '{}'.", field);
                     Type fieldGenericType = field.getGenericType();
