@@ -5,7 +5,6 @@ import com.iterexoff.soapStepsGenerator.generators.context.GenerateContextsHolde
 import com.iterexoff.soapStepsGenerator.generators.context.SoapCallGenerateContext;
 import com.iterexoff.soapStepsGenerator.generators.context.StepForFieldGenerateContext;
 import com.squareup.javapoet.*;
-import io.qameta.allure.Step;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -93,7 +92,7 @@ public class SoapCallGenerator {
         MethodSpec constructorMethodSpec = MethodSpec.constructorBuilder()
                 .addModifiers(Modifier.PUBLIC)
                 .addStatement(
-                        "$N($T.class, \"\"/*$S*/)",
+                        "$N($T.class, () -> \"\"/*$S*/)",
                         SET_WSDL_LOCATION_METHOD_NAME,
                         soapCallGenerateContext.getWsdlServiceClass(),
                         GET_PROPERTY_TEMPLATE)
@@ -149,9 +148,6 @@ public class SoapCallGenerator {
     }
 
     private void addCallRequestMethod(SoapCallGenerateContext soapCallGenerateContext) {
-        AnnotationSpec stepAnnotationSpec = AnnotationSpec.builder(Step.class)
-                .addMember("value", "\"Выполнение SOAP-запроса $N\"", soapCallGenerateContext.getRequestName())
-                .build();
         String requestBodyParameterName = "requestBody";
         MethodSpec addGetPortMethodSpec = MethodSpec.methodBuilder(CALL_REQUEST_METHOD_NAME)
                 .addModifiers(Modifier.PROTECTED)
@@ -159,7 +155,6 @@ public class SoapCallGenerator {
                 .addException(Exception.class)
                 .returns(soapCallGenerateContext.getWsdlMethodResponseClass())
                 .addAnnotation(Override.class)
-                .addAnnotation(stepAnnotationSpec)
                 .addStatement("return $N.$N($N)", PORT_FIELD_NAME, soapCallGenerateContext.getUncapitalizeWsdlMethod(), requestBodyParameterName)
                 .build();
 
@@ -168,7 +163,7 @@ public class SoapCallGenerator {
 
     private void addGetRequestNameMethod(SoapCallGenerateContext soapCallGenerateContext) {
         MethodSpec addGetPortMethodSpec = MethodSpec.methodBuilder(GET_REQUEST_NAME_METHOD_NAME)
-                .addModifiers(Modifier.PROTECTED)
+                .addModifiers(Modifier.PUBLIC)
                 .returns(String.class)
                 .addAnnotation(Override.class)
                 .addStatement("return $S", soapCallGenerateContext.getRequestName())
