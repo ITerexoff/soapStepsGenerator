@@ -40,11 +40,11 @@ public class CommonEntitiesGenerator {
         if (type instanceof ParameterizedType && TypeUtils.isAssignable(type, List.class)) {
             Type firstArgumentType = TypeUtils.getFirstTypeArgument((ParameterizedType) type)
                     .orElseThrow(() -> new RuntimeException("Cannot get type of first argument for parametrized type " + type));
-            ParameterizedTypeName parameterizedTypeName = ParameterizedTypeName.get(ClassName.get(Collection.class), WildcardTypeName.subtypeOf(firstArgumentType));
+            TypeName parameterizedTypeName = WildcardTypeName.subtypeOf(ParameterizedTypeName.get(ClassName.get(Collection.class), WildcardTypeName.subtypeOf(firstArgumentType)));
             return ParameterSpec.builder(ParameterizedTypeName.get(MATCHER_CLASS_NAME, parameterizedTypeName), MATCHER_PARAMETER_NAME).build();
             //todo - else ветку проработать
         } else {
-            return ParameterSpec.builder(ParameterizedTypeName.get(MATCHER_CLASS_NAME, ClassName.get(type).box()), MATCHER_PARAMETER_NAME).build();
+            return ParameterSpec.builder(ParameterizedTypeName.get(MATCHER_CLASS_NAME, WildcardTypeName.subtypeOf(ClassName.get(type).box())), MATCHER_PARAMETER_NAME).build();
         }
     }
 
