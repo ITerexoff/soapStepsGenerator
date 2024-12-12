@@ -7,7 +7,7 @@
     <groupId>com.iterexoff</groupId>
     <artifactId>soapSteps</artifactId>
     <packaging>pom</packaging>
-    <version>1.0.2</version>
+    <version>1.0.3</version>
     <modules>
         <module>soap-steps-maven-plugin</module>
         <module>soapStepsGenerator</module>
