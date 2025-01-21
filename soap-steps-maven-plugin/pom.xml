@@ -3,7 +3,7 @@
     <parent>
         <artifactId>soapSteps</artifactId>
         <groupId>com.iterexoff</groupId>
-        <version>1.0.2</version>
+        <version>1.0.3</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -45,7 +45,7 @@
         <dependency>
             <groupId>com.iterexoff</groupId>
             <artifactId>soapStepsGenerator</artifactId>
-            <version>1.0.2</version>
+            <version>1.0.3</version>
         </dependency>
     </dependencies>
 
